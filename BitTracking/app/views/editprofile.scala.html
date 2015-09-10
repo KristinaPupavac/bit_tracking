@@ -1,4 +1,4 @@
-@(user: User)
+@(user: User, image: ImagePath)
     @import helper._
     @main("Edit your profile") {
 
@@ -12,105 +12,107 @@
                 <div class="col-md-12">
                     <div class="row">
 
-                            <!--======IMAGE UPLOAD========-->
-                        <div class="col-md-3">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="text-center">
-                                        <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
-                                        <h6>Upload a different photo...</h6>
-
-                                        <input type="file" class="form-control">
+                            <div class="col-md-9">
+                                <div class="alert alert-info alert-dismissable">
+                                    <a class="panel-close close" data-dismiss="alert">?</a>
+                                    <i class="fa fa-coffee"></i>
+                                    This is an <strong>.alert</strong>. Use this to show important messages to the user.
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3>Edit Profile</h3>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div> <!--Ends Image upload-->
-                        <div class="col-md-9">
-                            <div class="alert alert-info alert-dismissable">
-                                <a class="panel-close close" data-dismiss="alert">?</a>
-                                <i class="fa fa-coffee"></i>
-                                This is an <strong>.alert</strong>. Use this to show important messages to the user.
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>Edit Profile</h3>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5>Personal information</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-
-
-                                @helper.form(action = routes.UserController.updateUser(user.id), 'class -> "form-horizontal", 'role -> "form") {
-                                    <div class="form-group">
-
-                                        <label for="inputName" class="col-sm-2 control-label">
-                                            First Name:
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <input type="text" onblur="checkFirstName()" name="firstName" class="form-control" id="inputName" value="@user.firstName" required="required">
-                                            <span id="nameError" class="alert-danger" data-error-for="" ></span>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Personal information</h5>
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
 
-                                    <div class="form-group">
 
-                                        <label for="inputLastName" class="col-sm-2 control-label">
-                                            Last Name:
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <input type="text" onblur="checkLastName()" name="lastName" class="form-control" id="inputLastName" value="@user.lastName" required="required">
-                                            <span id="lastNameError" class="alert-danger" data-error-for="" ></span>
-                                        </div>
-                                    </div>
+                                    @helper.form(action = routes.UserController.updateUser(user.id), 'enctype -> "multipart/form-data", 'class -> "form-horizontal", 'role -> "form") {
 
-                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="text-center">
 
-                                        <label for="inputPassword3" class="col-sm-2 control-label" >
-                                            Password:
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                                        <img src="http://placehold.it/100x100" class="avatar img-circle" alt="avatar">
+                                                        <h6>Upload a different photo...</h6>
 
-                                                <input name="password" id="inputPassword3" onblur="checkPassword()" type="password" class="form-control" placeholder="Password">
-                                                <span id="passError" class="alert-danger" data-error-for="" ></span>
+                                                        <input type="file" name="picture" class="form-control" accept="image/*">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div> <!--Ends Image upload-->
+
+                                        <div class="form-group">
+
+                                            <label for="inputName" class="col-sm-2 control-label">
+                                                First Name:
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <input type="text" onblur="checkFirstName()" name="firstName" class="form-control" id="inputName" value="@user.firstName" required="required">
+                                                <span id="nameError" class="alert-danger" data-error-for="" ></span>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-group">
+                                        <div class="form-group">
 
-                                        <label for="inputPassword3" class="col-sm-2 control-label">
-                                            Confirm Password:
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-
-                                                <input name="repassword" id="inputPassword4" onblur="checkPasswords()" type="password" class="form-control" placeholder="Password">
-                                                <span id="repassError" class="alert-danger" data-error-for="" ></span>
+                                            <label for="inputLastName" class="col-sm-2 control-label">
+                                                Last Name:
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <input type="text" onblur="checkLastName()" name="lastName" class="form-control" id="inputLastName" value="@user.lastName" required="required">
+                                                <span id="lastNameError" class="alert-danger" data-error-for="" ></span>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <input type="submit" class="btn btn-primary" value="Save Changes">
-                                            <span></span>
-                                            <input type="reset" class="btn btn-default" value="Cancel">
+                                        <div class="form-group">
+
+                                            <label for="inputPassword3" class="col-sm-2 control-label" >
+                                                Password:
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+
+                                                    <input name="password" id="inputPassword3" onblur="checkPassword()" type="password" class="form-control" placeholder="Password">
+                                                    <span id="passError" class="alert-danger" data-error-for="" ></span>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <div class="form-group">
+
+                                            <label for="inputPassword3" class="col-sm-2 control-label">
+                                                Confirm Password:
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+
+                                                    <input name="repassword" id="inputPassword4" onblur="checkPasswords()" type="password" class="form-control" placeholder="Password">
+                                                    <span id="repassError" class="alert-danger" data-error-for="" ></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <input type="submit" class="btn btn-primary" value="Save Changes">
+                                                <span></span>
+                                                <input type="reset" class="btn btn-default" value="Cancel">
+                                            </div>
+                                        </div>
+                                    }
                                     </div>
-                                }
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

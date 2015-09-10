@@ -1,18 +1,21 @@
 package controllers;
 
 import com.avaje.ebean.Ebean;
-import helpers.CurrentUser;
 import helpers.SessionHelper;
+import models.ImagePath;
 import models.PostOffice;
 import models.User;
 import models.UserType;
-import play.Logger;
+import org.apache.commons.io.FileUtils;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import play.mvc.Security;
 import views.html.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -121,11 +124,13 @@ public class UserController extends Controller {
         User u1 = SessionHelper.getCurrentUser(ctx());
         User user = User.findById(id);
 
+        ImagePath image = ImagePath.findImage.where().eq("profile_photo_id", user.id).findUnique();
+       // System.out.println(image.image_url);
 
         if (user == null || u1.id != user.id) {
             return redirect(routes.Application.index());
         }
-        return ok(editprofile.render(user));
+        return ok(editprofile.render(user, image));
     }
 
     /**
@@ -137,6 +142,23 @@ public class UserController extends Controller {
     public Result updateUser(Long id) {
         User u1 = SessionHelper.getCurrentUser(ctx());
         User user = User.findById(id);
+
+        MultipartFormData body = request().body().asMultipartFormData();
+        FilePart picture = body.getFile("picture");
+
+        if(picture != null) {
+            String fileName = picture.getFilename();
+            File file = picture.getFile();
+            String path = "\\public\\images\\" + fileName;
+            try {
+                FileUtils.moveFile(file, new File(path));
+
+                ImagePath image = new ImagePath(path, u1);
+                Ebean.save(image);
+            } catch (IOException e) {
+                flash("Could not move file.");
+            }
+        }
 
         Form<User> filledForm = newUser.fill(user);
 
@@ -156,6 +178,7 @@ public class UserController extends Controller {
                 return redirect(routes.Application.adminPanel());
             }
         }
+
         return redirect(routes.Application.login());
     }
 
@@ -221,7 +244,7 @@ public class UserController extends Controller {
         String postOffice = boundForm.bindFromRequest().field("postOffice").value();
 
         PostOffice wantedPostOffice = PostOffice.findOffice.where().eq("name", postOffice).findUnique();
-        System.out.println(postOffice +" "+ wantedPostOffice.name);
+        System.out.println(postOffice + " " + wantedPostOffice.name);
         User u = User.checkEmail(email);
         if (u == null) {
             u = new User(firstName, lastName, password, email, wantedPostOffice);
@@ -254,6 +277,5 @@ public class UserController extends Controller {
         }
 
     }
-
 
 }

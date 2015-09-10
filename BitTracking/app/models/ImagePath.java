@@ -21,4 +21,11 @@ public class ImagePath extends Model {
     public ImagePath(){
 
     }
+
+    public ImagePath(String image_url, User profilePhoto){
+        this.image_url = image_url;
+        this.profilePhoto = profilePhoto;
+    }
+
+    public static Model.Finder<Long, ImagePath> findImage = new Model.Finder<Long, ImagePath>(Long.class, ImagePath.class);
 }
