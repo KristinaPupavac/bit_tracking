@@ -7,6 +7,7 @@ import models.PostOffice;
 import models.User;
 import models.UserType;
 import org.apache.commons.io.FileUtils;
+import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static com.avaje.ebean.Ebean.update;
 
 /**
  * Created by mladen.teofilovic on 04/09/15.
@@ -149,9 +152,9 @@ public class UserController extends Controller {
         if(picture != null) {
             String fileName = picture.getFilename();
             File file = picture.getFile();
-            String path = "\\public\\images\\" + fileName;
+            String path = "images/" + fileName;
             try {
-                FileUtils.moveFile(file, new File(path));
+                FileUtils.moveFile(file, new File(Play.application().path() + "\\public\\images\\" + fileName));
 
                 ImagePath image = new ImagePath(path, u1);
                 Ebean.save(image);
@@ -171,7 +174,7 @@ public class UserController extends Controller {
         if (User.checkName(user.firstName) && User.checkName(user.lastName)) {
             if (user.password.equals(repassword)) {
                 user.password = getEncriptedPasswordMD5(user.password);
-                Ebean.update(user);
+                update(user);
                 if(user.typeOfUser != UserType.ADMIN) {
                     return redirect(routes.Application.index());
                 }
@@ -227,7 +230,7 @@ public class UserController extends Controller {
         } else {
             user.typeOfUser = UserType.REGISTERED_USER;
         }
-        Ebean.update(user);
+        update(user);
 
         return TODO;
 

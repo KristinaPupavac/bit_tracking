@@ -1,16 +1,10 @@
 package models;
 
 
-import javax.persistence.*;
-
-import com.avaje.ebean.Ebean;
-import play.data.format.Formats;
 import play.data.validation.Constraints;
-import play.db.*;
 import play.db.ebean.Model;
 
-import java.lang.Override;
-import java.lang.String;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
